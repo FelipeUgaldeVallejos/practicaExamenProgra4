@@ -62,4 +62,9 @@ public class Documento {
         this.tipo = tipo;
     }
 
+    public Float getPrecioTotal() {
+        float m = (monto != null) ? monto : 0f;
+        float t = (timbres != null) ? timbres : 0f;
+        return m + t;
+    }
 }

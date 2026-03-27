@@ -33,7 +33,7 @@ public class DocumentoService {
     }
 
     public List<Documento> getDocumentosPorTipo(String tipoId) {
-        return documentoRepository.findByTipo(tipoId);
+        return documentoRepository.findByTipoId(tipoId);
     }
 
     public List<Linea> getLineasDeUsuario(String usuarioId) {

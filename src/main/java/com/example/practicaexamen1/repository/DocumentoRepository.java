@@ -10,5 +10,7 @@ import java.util.List;
 
 @Repository
 public interface DocumentoRepository extends  JpaRepository<Documento,String> {
-        List<Documento> findByTipo(String tipoId); //busca documentos donde tipo.id == el parámetro automaticamente
+        // Busca documentos cuyo documento.tipo.id == tipoId
+        // (como `tipo` es una relación ManyToOne, no un String)
+        List<Documento> findByTipoId(String tipoId);
 }
