@@ -38,7 +38,10 @@
     -->
     <span style="color:white; font-weight:bold;" th:text="${usuarioId}"></span>
 
-    <a th:href="@{/inicio}">LOGOUT</a>
+    <form action="/logout" method="post" style="display: inline;">
+        <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+        <button type="submit">LOGOUT</button>
+    </form>
 </nav>
 
 <!-- ============================================
