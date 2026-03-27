@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<!--
+  PLANTILLA THYMELEAF: documentos.html
+  
+  Esta página se muestra SOLO a usuarios autenticados (Spring Security lo garantiza).
+  Tiene dos secciones:
+    1. DOCUMENTOS: filtro por tipo + lista de documentos disponibles
+    2. MIS DOCUMENTOS: lista de documentos que el usuario ha agregado
+-->
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Certificaciones - Documentos</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+    <link rel="icon" type="image/x-icon" th:href="@{/images/favicon.ico}">
+</head>
+<body>
+
+<!-- ============================================
+     HEADER
+     ============================================ -->
+<div class="header">
+    <img th:src="@{/images/header.jpg}" alt="Registro Nacional">
+</div>
+
+<!-- ============================================
+     NAVBAR con menú completo (usuario autenticado)
+     ============================================ -->
+<nav class="navbar">
+    <a th:href="@{/}">INICIO</a>
+    <a th:href="@{/presentation/documentos/show}">DOCUMENTOS</a>
+
+    <!--
+      th:text="${usuarioId}": muestra el ID del usuario logueado (en mayúsculas).
+      El controlador pone este valor en el modelo con:
+        model.addAttribute("usuarioId", authentication.getName().toUpperCase())
+    -->
+    <span style="color:white; font-weight:bold;" th:text="${usuarioId}"></span>
+
+    <a th:href="@{/logout}">LOGOUT</a>
+</nav>
+
+<!-- ============================================
+     CONTENIDO PRINCIPAL
+     ============================================ -->
+<div class="content-full">
+
+    <!-- ==========================================
+         SECCION 1: DOCUMENTOS
+         ========================================== -->
+    <div class="documentos-section">
+        <div class="documentos-title">DOCUMENTOS</div>
+
+        <!-- Caja de información -->
+        <div class="info-box">
+            <img th:src="@{/images/info.gif}" alt="Info">
+            <span>Por favor seleccione el tipo de documento que desee y luego presione "Ir".
+                  Una vez elegido el documento, por favor presione el botón de agregar.</span>
+        </div>
+
+        <!--
+          FORMULARIO DE FILTRO por tipo de documento.
+          
+          method="get": los datos se envían en la URL (?tipoId=001)
+          Eso permite que al recargar la página mantenga el filtro.
+          
+          th:action="@{/presentation/documentos/show}" -> URL del controlador
+        -->
+        <form th:action="@{/presentation/documentos/show}" method="get" class="filter-form">
+            <label for="tipoId">Tipo de Documento</label>
+
+            <!--
+              th:each="tipo : ${tipos}": itera sobre la lista "tipos" del modelo,
+              generando un <option> por cada Tipo.
+              
+              th:value="${tipo.id}": el valor que se envía al servidor
+              th:text="${tipo.nombre}": lo que se muestra al usuario
+              th:selected="${tipo.id == tipoSeleccionado}": mantiene la selección
+                después de filtrar (compara el id del tipo con el parámetro recibido)
+            -->
+            <select id="tipoId" name="tipoId">
+                <option value="">-- Seleccione --</option>
+                <option th:each="tipo : ${tipos}"
+                        th:value="${tipo.id}"
+                        th:text="${tipo.nombre}"
+                        th:selected="${tipo.id == tipoSeleccionado}">
+                </option>
+            </select>
+
+            <button type="submit" class="btn-ir">Ir</button>
+        </form>
+
+        <!--
+          TABLA DE DOCUMENTOS FILTRADOS
+          
+          th:if="${documentos != null and !#lists.isEmpty(documentos)}":
+          Solo muestra la tabla si hay documentos para mostrar.
+          #lists.isEmpty() es una utilidad de Thymeleaf para verificar si una lista está vacía.
+        -->
+        <div th:if="${documentos != null and !#lists.isEmpty(documentos)}">
+            <table class="tabla-documentos">
+                <thead>
+                    <tr>
+                        <th>Documento</th>
+                        <th>Precio</th>
+                        <th>Agregar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!--
+                      th:each="doc : ${documentos}": itera cada Documento de la lista
+                    -->
+                    <tr th:each="doc : ${documentos}">
+                        <td th:text="${doc.descripcion}"></td>
+                        <td th:text="${doc.precioTotal}"></td>
+                        <td>
+                            <!--
+                              FORMULARIO PARA AGREGAR DOCUMENTO
+                              
+                              Cada botón "Agregar" es un pequeño formulario POST.
+                              Envía:
+                                - documentoId: el ID del documento a agregar
+                                - tipoId: el tipo actual (para mantener el filtro al redirigir)
+                              
+                              NO se usa JavaScript, todo es HTML puro con forms.
+                            -->
+                            <form th:action="@{/presentation/documentos/agregar}"
+                                  method="post">
+                                <!-- Campo oculto: el ID del documento -->
+                                <input type="hidden" name="documentoId" th:value="${doc.id}">
+                                <!-- Campo oculto: mantiene el tipo seleccionado -->
+                                <input type="hidden" name="tipoId" th:value="${tipoSeleccionado}">
+
+                                <!--
+                                  Botón con imagen del carrito (agregar.jpg)
+                                  class="btn-agregar" -> estilo sin borde del botón
+                                -->
+                                <button type="submit" class="btn-agregar">
+                                    <img th:src="@{/images/agregar.jpg}" alt="Agregar">
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         SECCION 2: MIS DOCUMENTOS
+         ========================================== -->
+    <div class="mis-documentos-section">
+        <div class="mis-documentos-title">MIS DOCUMENTOS</div>
+
+        <!-- Caja de información -->
+        <div class="info-box">
+            <img th:src="@{/images/info.gif}" alt="Info">
+            <span>Este es el detalle de sus documentos. Recuerde que puede agregar otros
+                  o aumentar la cantidad de uno volviendo a agregarlo</span>
+        </div>
+
+        <!--
+          TABLA DE MIS DOCUMENTOS
+          
+          Siempre se muestra (aunque esté vacía).
+          Los datos vienen del modelo: "misLineas" y "total"
+        -->
+        <table class="tabla-documentos">
+            <thead>
+                <tr>
+                    <th>Descripción</th>
+                    <th>Monto</th>
+                    <th>Timbres</th>
+                    <th>Cantidad</th>
+                    <th>Monto Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!--
+                  th:each="linea : ${misLineas}": itera las líneas del usuario.
+                  
+                  Para acceder a datos anidados usamos dot notation:
+                  linea.documento.descripcion -> linea -> getDocumento() -> getDescripcion()
+                -->
+                <tr th:each="linea : ${misLineas}">
+                    <td th:text="${linea.documento.descripcion}"></td>
+                    <td th:text="${linea.documento.monto}"></td>
+                    <td th:text="${linea.documento.timbres}"></td>
+                    <td th:text="${linea.cantidad}"></td>
+                    <td th:text="${linea.montoTotal}"></td>
+                </tr>
+
+                <!-- Fila de mensaje si no hay documentos -->
+                <tr th:if="${#lists.isEmpty(misLineas)}">
+                    <td colspan="5" style="text-align:center; color:#999; font-style:italic;">
+                        No ha agregado documentos aún.
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <!-- Fila del TOTAL general -->
+                <tr class="fila-total">
+                    <td colspan="3"></td>
+                    <td><strong>Total</strong></td>
+                    <td>
+                        <!--
+                          th:text="${total}": imprime el total calculado por el servicio
+                          th:classappend: agrega la clase CSS "monto-total-grande" al <span>
+                        -->
+                        <span class="monto-total-grande" th:text="${total}"></span>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+</div>
+
+<!-- ============================================
+     FOOTER
+     ============================================ -->
+<footer>
+    Todos los derechos reservados . 2013 . Registro Nacional . San José, Curridabat.
+    Apartado Postal 523-2010 Curridabat rnpdigital@rnp.go.cr
+</footer>
+
+</body>
+</html>

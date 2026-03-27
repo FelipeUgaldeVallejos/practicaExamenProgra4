@@ -1,0 +1,371 @@
+/* ===================================================
+   ESTILOS - Sistema de Certificaciones Registro Nacional
+   =================================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+/* ===================================================
+   HEADER (imagen superior del Registro Nacional)
+   =================================================== */
+.header {
+    width: 100%;
+    border-bottom: 3px solid #003399;
+}
+
+.header img {
+    width: 100%;
+    display: block;
+}
+
+/* ===================================================
+   BARRA DE NAVEGACION (menú azul)
+   =================================================== */
+.navbar {
+    background-color: #003399;
+    padding: 6px 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.navbar a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 2px 8px;
+}
+
+.navbar a:hover {
+    text-decoration: underline;
+    color: #ffcc00;
+}
+
+/* ===================================================
+   LAYOUT PRINCIPAL (dos columnas en inicio)
+   =================================================== */
+.main-container {
+    display: flex;
+    min-height: 600px;
+    background-color: #ffffff;
+}
+
+/* Panel izquierdo - Login */
+.sidebar {
+    width: 200px;
+    min-width: 200px;
+    background-color: #e8e8e8;
+    border-right: 1px solid #cccccc;
+    padding: 15px;
+}
+
+/* Panel derecho - Contenido principal */
+.content {
+    flex: 1;
+    padding: 20px 30px;
+    background-color: #ffffff;
+}
+
+/* Layout de una sola columna (página de documentos) */
+.content-full {
+    width: 100%;
+    padding: 15px 30px;
+    background-color: #ffffff;
+}
+
+/* ===================================================
+   SECCION DE LOGIN (panel izquierdo en inicio)
+   =================================================== */
+.login-box {
+    background-color: #e8e8e8;
+}
+
+.login-box h3 {
+    font-size: 12px;
+    font-weight: bold;
+    color: #003399;
+    text-align: center;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+}
+
+.login-box label {
+    display: block;
+    font-size: 11px;
+    color: #333;
+    margin-bottom: 2px;
+    margin-top: 8px;
+}
+
+.login-box input[type="text"],
+.login-box input[type="password"] {
+    width: 100%;
+    padding: 5px;
+    font-size: 12px;
+    border: 1px solid #aaa;
+    border-radius: 2px;
+    background-color: #f9f9f9;
+}
+
+.login-box input[type="text"]::placeholder,
+.login-box input[type="password"]::placeholder {
+    color: #aaa;
+    font-size: 11px;
+}
+
+.btn-ingresar {
+    margin-top: 12px;
+    width: 100%;
+    padding: 6px;
+    background-color: #003399;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-ingresar:hover {
+    background-color: #0044cc;
+}
+
+.login-error {
+    color: red;
+    font-size: 11px;
+    margin-top: 6px;
+    text-align: center;
+}
+
+/* ===================================================
+   TITULOS DE SECCION (INICIO, DOCUMENTOS, etc.)
+   =================================================== */
+.section-title {
+    background-color: #003399;
+    color: white;
+    text-align: center;
+    padding: 5px 10px;
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+/* ===================================================
+   CONTENIDO DE LA PAGINA DE INICIO
+   =================================================== */
+.welcome-title {
+    color: #003399;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.mision-vision h4 {
+    color: #333;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.mision-vision p {
+    font-style: italic;
+    font-size: 12px;
+    text-align: center;
+    margin-bottom: 15px;
+    color: #444;
+}
+
+.notificaciones h4 {
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.notificaciones ul {
+    list-style: none;
+    padding: 0;
+}
+
+.notificaciones li {
+    padding: 4px 0;
+    font-size: 12px;
+    color: #444;
+    border-bottom: 1px dotted #ccc;
+}
+
+.notificaciones li::before {
+    content: "• ";
+    color: #003399;
+}
+
+/* ===================================================
+   CAJA DE INFORMACION (icono info.gif + texto)
+   =================================================== */
+.info-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    background-color: #fffbe6;
+    border: 1px solid #e6d800;
+    padding: 8px 10px;
+    margin-bottom: 12px;
+    font-size: 12px;
+    color: #555;
+}
+
+.info-box img {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+/* ===================================================
+   FORMULARIO DE FILTRO (Tipo de Documento + botón Ir)
+   =================================================== */
+.filter-form {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.filter-form label {
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.filter-form select {
+    padding: 4px 6px;
+    font-size: 12px;
+    border: 1px solid #aaa;
+    border-radius: 2px;
+}
+
+.btn-ir {
+    padding: 4px 12px;
+    background-color: #003399;
+    color: white;
+    border: none;
+    border-radius: 2px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-ir:hover {
+    background-color: #0044cc;
+}
+
+/* ===================================================
+   TABLAS (documentos y mis documentos)
+   =================================================== */
+.tabla-documentos {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 15px;
+    font-size: 12px;
+}
+
+.tabla-documentos th {
+    background-color: #003399;
+    color: white;
+    padding: 6px 10px;
+    text-align: left;
+    font-size: 12px;
+}
+
+.tabla-documentos td {
+    padding: 5px 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.tabla-documentos tr:nth-child(even) {
+    background-color: #f5f5f5;
+}
+
+.tabla-documentos tr:hover {
+    background-color: #e8f0ff;
+}
+
+/* Botón de agregar (imagen del carrito) */
+.btn-agregar {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.btn-agregar img {
+    width: 24px;
+    height: 24px;
+}
+
+.btn-agregar:hover {
+    opacity: 0.75;
+}
+
+/* ===================================================
+   SECCION MIS DOCUMENTOS
+   =================================================== */
+.mis-documentos-section {
+    border: 2px dashed #cc0000;
+    padding: 10px 15px;
+    margin-top: 10px;
+}
+
+.mis-documentos-title {
+    color: #cc0000;
+    font-weight: bold;
+    font-size: 13px;
+    margin-bottom: 8px;
+}
+
+/* Fila del TOTAL al final de la tabla */
+.fila-total td {
+    font-weight: bold;
+    border-top: 2px solid #003399;
+}
+
+.monto-total-grande {
+    color: #cc0000;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* ===================================================
+   SECCION DE DOCUMENTOS (borde rojo punteado)
+   =================================================== */
+.documentos-section {
+    border: 2px dashed #cc0000;
+    padding: 10px 15px;
+    margin-bottom: 15px;
+}
+
+.documentos-title {
+    color: #cc0000;
+    font-weight: bold;
+    font-size: 13px;
+    margin-bottom: 8px;
+}
+
+/* ===================================================
+   FOOTER
+   =================================================== */
+footer {
+    background-color: #003399;
+    color: #ffffff;
+    text-align: center;
+    padding: 8px;
+    font-size: 11px;
+    margin-top: 20px;
+}

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<!--
+  PLANTILLA THYMELEAF: inicio.html
+  
+  Thymeleaf extiende HTML con atributos especiales (th:*) que el servidor
+  reemplaza con valores reales antes de enviar el HTML al navegador.
+  El navegador nunca ve los atributos th:* — solo ve HTML puro.
+  
+  xmlns:th -> declara el espacio de nombres de Thymeleaf
+  xmlns:sec -> declara el espacio de nombres de Spring Security para Thymeleaf
+-->
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Certificaciones</title>
+    <!-- th:href="@{...}" genera la URL correcta del recurso estático -->
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+    <link rel="icon" type="image/x-icon" th:href="@{/images/favicon.ico}">
+</head>
+<body>
+
+<!-- ============================================
+     HEADER: imagen del Registro Nacional
+     ============================================ -->
+<div class="header">
+    <!-- th:src="@{...}" genera la URL correcta de la imagen -->
+    <img th:src="@{/images/header.jpg}" alt="Registro Nacional">
+</div>
+
+<!-- ============================================
+     NAVBAR: menú de navegación
+     
+     sec:authorize="isAnonymous()": este bloque solo se muestra
+     si NO hay usuario logueado
+     sec:authorize="isAuthenticated()": solo si HAY usuario logueado
+     ============================================ -->
+<nav class="navbar">
+    <a th:href="@{/}">INICIO</a>
+
+    <!-- Enlace DOCUMENTOS solo visible si está autenticado -->
+    <a sec:authorize="isAuthenticated()"
+       th:href="@{/presentation/documentos/show}">DOCUMENTOS</a>
+
+    <!-- Nombre del usuario y LOGOUT solo si está autenticado -->
+    <!-- sec:authentication="name" imprime el username del usuario logueado -->
+    <span sec:authorize="isAuthenticated()"
+          sec:authentication="name"
+          style="color:white; font-weight:bold; text-transform:uppercase;"></span>
+
+    <a sec:authorize="isAuthenticated()"
+       th:href="@{/logout}">LOGOUT</a>
+</nav>
+
+<!-- ============================================
+     CONTENIDO PRINCIPAL: dos columnas
+     - Izquierda: Login (solo si no está logueado)
+     - Derecha: Texto de bienvenida
+     ============================================ -->
+<div class="main-container">
+
+    <!-- ==========================================
+         PANEL IZQUIERDO: Formulario de Login
+         Solo se muestra si el usuario NO está autenticado.
+         sec:authorize="isAnonymous()" = no hay sesión activa
+         ========================================== -->
+    <div class="sidebar" sec:authorize="isAnonymous()">
+        <div class="login-box">
+            <h3>Ingreso para Usuarios Registrados</h3>
+
+            <!--
+              FORMULARIO DE LOGIN
+              th:action="@{/login}" -> envía al URL /login (maneja Spring Security)
+              method="post" -> envía los datos de forma segura
+              
+              Spring Security espera los campos "id" y "clave"
+              (los configuramos en SecurityConfig con .usernameParameter y .passwordParameter)
+            -->
+            <form th:action="@{/login}" method="post">
+
+                <!-- Token CSRF: Spring Security lo requiere en formularios POST -->
+                <!-- Thymeleaf lo agrega automáticamente con th:action -->
+
+                <label for="id">Correo electrónico</label>
+                <input type="text"
+                       id="id"
+                       name="id"
+                       placeholder="Email del usuario"
+                       required>
+
+                <label for="clave">Contraseña</label>
+                <input type="password"
+                       id="clave"
+                       name="clave"
+                       placeholder="Clave del usuario"
+                       required>
+
+                <button type="submit" class="btn-ingresar">Ingresar</button>
+
+                <!--
+                  th:if="${errorLogin}": muestra este párrafo SOLO si el modelo
+                  tiene el atributo "errorLogin" (lo agrega el controlador si el login falla)
+                  th:text="${errorLogin}": imprime el valor del atributo
+                -->
+                <p class="login-error" th:if="${errorLogin}" th:text="${errorLogin}"></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         PANEL DERECHO: Contenido de la página de Inicio
+         ========================================== -->
+    <div class="content">
+        <div class="section-title">INICIO</div>
+
+        <!-- Título de bienvenida desde textos.txt -->
+        <p class="welcome-title">
+            Bienvenidos al Sistema de Certificaciones e Informes Digitales en linea del Registro Nacional
+        </p>
+
+        <!-- Misión -->
+        <div class="mision-vision">
+            <h4>Nuestra Misión</h4>
+            <p>
+                "El Registro Nacional de Costa Rica es la Institución Pública, rectora y responsable de la
+                actividad registral y geoespacial; protege los derechos inscritos de personas físicas y jurídicas,
+                ofreciendo servicios de calidad y seguridad jurídica a los usuarios."
+            </p>
+
+            <!-- Visión -->
+            <h4>Nuestra Visión:</h4>
+            <p>
+                "Fortalecer la seguridad jurídica y el liderazgo en la prestación de servicios calidad e
+                innovadores, en armonía con el ambiente."
+            </p>
+        </div>
+
+        <!-- Notificaciones -->
+        <div class="notificaciones">
+            <h4>Notificaciones</h4>
+            <ul>
+                <li>
+                    Señor usuario. En caso de requerir certificaciones para ser tramitadas ante el
+                    Ministerio de Relaciones Exteriores o para efectos de remates, deberá solicitarlas
+                    en las sedes, central o regional, del Registro Nacional.
+                </li>
+                <li>
+                    Este sistema funciona en forma apropiada en las siguientes tecnologías, Navegadores:
+                    FireFox 4 o superior, Internet Explorer 7 o superior, Google Chrome, Safari 3.x y superior.
+                    Sistemas Operativos: Windows 7 o superior y Apple OS X 10.5. o superior
+                </li>
+                <li>
+                    El horario del Centro de Atención al Cliente es de Lunes a Viernes de 8:00 AM a 4:00 PM.
+                    Tel: 2202-0888
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+
+<!-- ============================================
+     FOOTER
+     ============================================ -->
+<footer>
+    Todos los derechos reservados . 2013 . Registro Nacional . San José, Curridabat.
+    Apartado Postal 523-2010 Curridabat rnpdigital@rnp.go.cr
+</footer>
+
+</body>
+</html>
